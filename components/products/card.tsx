@@ -20,7 +20,7 @@ const Card = ({ item, url }: any) => {
             <div className="inner-content">
               {/* <i className="facdori-icon-factory-1 box-icon"></i> */}
               <h3>
-                <Link href={`${url}/${item._id}`}>{item?.cardTitle}</Link>
+                <Link href={`${url}/${item._id}`}>{item?.category}</Link>
               </h3>
             </div>
           </div>

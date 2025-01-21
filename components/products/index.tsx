@@ -2,17 +2,19 @@
 import React, { useEffect, useState } from "react";
 import Card from "./card";
 import { db, getAllDocuments } from "../../services/firebase/index";
-import { collection, getDocs, query } from "firebase/firestore";
-import { where } from "firebase/firestore/lite";
+import { collection, getDocs, query, where } from "firebase/firestore";
 const Product = ({ type, url }: any) => {
-  console.log("🚀 ~ Product ~ type:", type);
   const [d, setD] = useState([]);
   console.log("🚀 ~ Product ~ d:", d);
   useEffect(() => {
     (async () => {
-      const docSnap = await getDocs(
-        query(collection(db, "products"), where("category", "==", type))
+      const q = query(
+        collection(db, "products"),
+        where("category", "==", type)
       );
+
+      const docSnap = await getDocs(q);
+
       const data: any = [];
       docSnap.forEach((element) => {
         const a: any = element.data();
@@ -22,7 +24,7 @@ const Product = ({ type, url }: any) => {
 
       setD(data);
     })();
-  }, []);
+  }, [type]);
   return (
     <>
       <div className="inner-banner text-center">
@@ -32,25 +34,35 @@ const Product = ({ type, url }: any) => {
               <a href="index-2.html">Home</a>
             </li>
             <li>
-              <span>Our Services</span>
+              <span>{type}</span>
             </li>
           </ul>
-          <h1>Services Style 01</h1>
+          <h1>{type}</h1>
         </div>
       </div>
-      {d ? (
-        <section className="sec-pad-with-content-margin-30 gray-bg service-page-one">
-          <div className="container">
-            <div className="row">
-              {d?.map((item: any, index: number) => (
+      <section className="sec-pad-with-content-margin-30 gray-bg service-page-one">
+        <div className="container">
+          <div className="row">
+            {d.length ? (
+              d?.map((item: any, index: number) => (
                 <Card item={item} url={url} />
-              ))}
-            </div>
+              ))
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center !important",
+                  alignItems: "center !important",
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
+                <h1>No {type} Found </h1>
+              </div>
+            )}
           </div>
-        </section>
-      ) : (
-        <></>
-      )}
+        </div>
+      </section>
     </>
   );
 };

@@ -99,6 +99,7 @@ export const getDocumentsByCondition = async (
 };
 export const getAllDocuments = async (collectionName) => {
   const docSnap = await getDocs(query(collection(db, collectionName)));
+  
   const d = [];
   docSnap.forEach((element) => {
     const a = element.data();
